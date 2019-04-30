@@ -3,7 +3,7 @@ from pygame.locals import *
 FPS = 90
 fpsClock = pygame.time.Clock()
 DISPLAYSURF = pygame.display.set_mode((1000,500), 0, 32)
-pygame.display.set_caption("Dino Jump")
+pygame.display.set_caption("Light")
 
 
 while True:
