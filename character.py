@@ -1,9 +1,9 @@
 import pygame, sys, time, random
 from pygame.locals import *
-class Character(self):
+class Character(pygame.sprite.Sprite):
     def __init__(self, name):
         self.name = name
-        self.def = 0
+        self.defense = 0
         self.att = 0
         self.hp = 100
         self.light = 15
