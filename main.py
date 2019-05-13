@@ -2,6 +2,7 @@ import pygame, sys, time, random
 from pygame.locals import *
 from character import Character
 from platform import Platform
+#Test
 FPS = 90
 WHITE = (255,255,255)
 fpsClock = pygame.time.Clock()
