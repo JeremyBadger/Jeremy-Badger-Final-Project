@@ -3,6 +3,7 @@ from pygame.locals import *
 from character import Character
 from platform import Platform
 FPS = 90
+pygame.init()
 WHITE = (255,255,255)
 fpsClock = pygame.time.Clock()
 DISPLAYSURF = pygame.display.set_mode((768,432), 0, 32)
@@ -18,14 +19,16 @@ grassp1 = Platform(10, 1, 0, 382, 'resources/Platform-Textures/plat-text-dirt.pn
 stage = "SELECT"
 character = ""
 player = ""
+plats = pygame.sprite.Group()
+plats.add(grassp1)
 def plat_detect(entity1, plat):
-    if pygame.sprite.spritecollideany(entity1, plat.top):
+    if pygame.sprite.collide_rect(entity1.rect, plat.top):
         entity1.rect.y = plat.posY - 96
-    elif pygame.sprite.spritecollideany(entity1, plat.left):
+    elif pygame.sprite.collide_rect(entity1.rect, plat.left):
         entity1.rect.x = plat.posX
-    elif pygame.sprite.spritecollideany(entity1, plat.right):
+    elif pygame.sprite.collide_rect(entity1.rect, plat.right):
         entity1.rect.x = plat.posX + (plat.width * 50)
-    elif pygame.sprite.spritecollideany(entity1, plat.bottom):
+    elif pygame.sprite.collide_rect(entity1.rect, plat.bottom):
         entity1.rect.y = plat.posY + (plat.height * 50)
 
 while True:
@@ -56,4 +59,7 @@ while True:
                 if character != "" and event.key == K_RETURN:
                     stage = "1-1"
                     player = Character(character)
+    if player != "":
+        for x in plats:
+            plat_detect(player, x)
     pygame.display.update()

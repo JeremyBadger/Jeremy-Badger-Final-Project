@@ -4,6 +4,7 @@ SOLARIO = pygame.image.load('resources/CharEnemy/SO_igs.png')
 SOLARIO = pygame.transform.scale(SOLARIO,(96,96))
 class Character(pygame.sprite.Sprite):
     def __init__(self, name):
+        super().__init__()
         self.name = name
         self.x = 0
         self.y = 300
@@ -11,6 +12,7 @@ class Character(pygame.sprite.Sprite):
         self.att = 0
         self.hp = 100
         self.light = 15
+        self.rect = pygame.Rect(self.x,self.y,54,96)
         global theme
         if self.name == "SOLARIO":
             self.att = 2
