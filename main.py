@@ -22,15 +22,23 @@ character = ""
 player = ""
 plats = pygame.sprite.Group()
 plats.add(grassp1)
-def plat_detect(entity1, plat):
-    if pygame.sprite.collide_rect(entity1.rect, plat.top):
+onGround = True
+global dropHeight
+dropHeight = 1
+def plat_detect(entity1, plat, onGround):
+    if pygame.Rect.colliderect(entity1.rect, plat.top):
         entity1.rect.y = plat.posY - 96
-    elif pygame.sprite.collide_rect(entity1.rect, plat.left):
+        onGround = True
+        dropHeight = 1
+    elif pygame.Rect.colliderect(entity1.rect, plat.left):
         entity1.rect.x = plat.posX
-    elif pygame.sprite.collide_rect(entity1.rect, plat.right):
+    elif pygame.Rect.colliderect(entity1.rect, plat.right):
         entity1.rect.x = plat.posX + (plat.width * 50)
-    elif pygame.sprite.collide_rect(entity1.rect, plat.bottom):
+    elif pygame.Rect.colliderect(entity1.rect, plat.bottom):
         entity1.rect.y = plat.posY + (plat.height * 50)
+    else:
+        onGround = False
+    return(onGround)
 
 while True:
     #Fill in background
@@ -43,8 +51,11 @@ while True:
         elif player.name == "LUNA":
             DISPLAYSURF.blit(NIGHT1,(1,1))
     if player != "":
-        DISPLAYSURF.blit(player.image, (player.x, player.y))
-        DISPLAYSURF.blit(grassp1.texture,(grassp1.posX,grassp1.posY))
+        DISPLAYSURF.blit(player.image, (player.rect.x, player.rect.y))
+        posHolder = 0
+        for x in grassp1.imagelist:
+            DISPLAYSURF.blit(x,(grassp1.posX + posHolder,grassp1.posY))
+            posHolder += 50
 
     #Event loop
     for event in pygame.event.get():
@@ -60,7 +71,19 @@ while True:
                 if character != "" and event.key == K_RETURN:
                     stage = "1-1"
                     player = Character(character)
+            if stage != "SELECT":
+                if event.key == K_a:
+                    player.rect.x -= 10
+                elif event.key == K_d:
+                    player.rect.x += 10
+    #if onGround == False:
+
     if player != "":
         for x in plats:
-            plat_detect(player, x)
+            onGround = plat_detect(player, x, onGround)
+        if onGround == False:
+            player.rect.y += dropHeight
+            dropHeight += dropHeight**2
+        else:
+            dropHeight = 1
     pygame.display.update()
