@@ -25,6 +25,7 @@ plats.add(grassp1)
 onGround = True
 global dropHeight
 dropHeight = 1
+pygame.key.set_repeat(120,30)
 def plat_detect(entity1, plat, onGround):
     if pygame.Rect.colliderect(entity1.rect, plat.top):
         entity1.rect.y = plat.posY - 96
@@ -76,14 +77,23 @@ while True:
                     player.rect.x -= 10
                 elif event.key == K_d:
                     player.rect.x += 10
+                if event.key == K_SPACE:
+                    player.prejump()
+                    player.jump()
     #if onGround == False:
 
     if player != "":
         for x in plats:
             onGround = plat_detect(player, x, onGround)
         if onGround == False:
-            player.rect.y += dropHeight
+            #player.rect.y += dropHeight
             dropHeight += dropHeight**2
         else:
             dropHeight = 1
+            player.UOrD = 0
+
+        if player.heightNum == 13:
+            player.jump()
+        elif player.heightNum != 13 and player.heightNum != 0:
+            player.jump()
     pygame.display.update()
