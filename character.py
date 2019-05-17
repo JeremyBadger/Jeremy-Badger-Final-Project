@@ -26,8 +26,6 @@ class Character(pygame.sprite.Sprite):
             self.att = 1
             self.light = 25
             theme = "NIGHT"
-    def prejump(self):
-        self.holdrecty = self.rect.y
     def jump(self):
         if self.heightNum <= 12.5 and self.UOrD == 0 or self.heightNum == 0:
             self.rect.y += self.heightNum**2
@@ -35,7 +33,7 @@ class Character(pygame.sprite.Sprite):
             self.UOrD = 0
             if self.rect.y <= self.holdrecty - 150:
                 self.UOrD = 1
-        elif self.heightNum == 13.0 or self.UOrD == 1 and self.heightNum >= 0:
+        elif self.heightNum == 13.0 or self.UOrD == 1 and self.heightNum >= 3:
             self.heightNum -= 0.5
             self.rect.y -= self.heightNum**2
             self.UOrD = 1

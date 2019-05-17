@@ -30,7 +30,9 @@ def plat_detect(entity1, plat, onGround):
     if pygame.Rect.colliderect(entity1.rect, plat.top):
         entity1.rect.y = plat.posY - 96
         onGround = True
-        dropHeight = 1
+        dropHeight = plat.top.y
+        if player != "":
+            player.holdrecty = plat
     elif pygame.Rect.colliderect(entity1.rect, plat.left):
         entity1.rect.x = plat.posX
     elif pygame.Rect.colliderect(entity1.rect, plat.right):
@@ -78,7 +80,6 @@ while True:
                 elif event.key == K_d:
                     player.rect.x += 10
                 if event.key == K_SPACE:
-                    player.prejump()
                     player.jump()
     #if onGround == False:
 
@@ -90,10 +91,10 @@ while True:
             dropHeight += dropHeight**2
         else:
             dropHeight = 1
-            player.UOrD = 0
 
         if player.heightNum == 13:
+            player.UOrD = 1
             player.jump()
-        elif player.heightNum != 13 and player.heightNum != 0:
+        elif player.heightNum != 13 and player.heightNum != 3:
             player.jump()
     pygame.display.update()
