@@ -28,17 +28,18 @@ dropHeight = 1
 pygame.key.set_repeat(120,30)
 def plat_detect(entity1, plat, onGround):
     if pygame.Rect.colliderect(entity1.rect, plat.top):
-        entity1.rect.y = plat.posY - 96
+        if player.inJump == False:
+            entity1.rect.y = plat.posY - 96
         onGround = True
-        dropHeight = plat.top.y
-        if player != "":
-            player.holdrecty = plat
     elif pygame.Rect.colliderect(entity1.rect, plat.left):
         entity1.rect.x = plat.posX
+        onGround = False
     elif pygame.Rect.colliderect(entity1.rect, plat.right):
         entity1.rect.x = plat.posX + (plat.width * 50)
+        onGround = False
     elif pygame.Rect.colliderect(entity1.rect, plat.bottom):
         entity1.rect.y = plat.posY + (plat.height * 50)
+        onGround = False
     else:
         onGround = False
     return(onGround)
@@ -80,21 +81,26 @@ while True:
                 elif event.key == K_d:
                     player.rect.x += 10
                 if event.key == K_SPACE:
-                    player.jump()
+                    if onGround == True:
+                        player.jump()
     #if onGround == False:
 
     if player != "":
         for x in plats:
-            onGround = plat_detect(player, x, onGround)
-        if onGround == False:
-            #player.rect.y += dropHeight
+            if player.inJump == False:
+                onGround = plat_detect(player, x, onGround)
+        if onGround == False and player.inJump == False:
+            player.rect.y += dropHeight
             dropHeight += dropHeight**2
         else:
-            dropHeight = 1
-
-        if player.heightNum == 13:
-            player.UOrD = 1
-            player.jump()
-        elif player.heightNum != 13 and player.heightNum != 3:
-            player.jump()
+            dropHeight = .1
+            player.UOrD = 0
+            player.heightNum = 2
+            player.inJump = False
+        if player.inJump == True:
+            if player.heightNum == 13:
+                player.UOrD = 1
+                player.jump()
+            elif player.heightNum != 13 and player.heightNum != 2:
+                player.jump()
     pygame.display.update()

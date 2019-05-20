@@ -13,9 +13,9 @@ class Character(pygame.sprite.Sprite):
         self.hp = 100
         self.light = 15
         self.rect = pygame.Rect(self.x,self.y,54,96)
-        self.heightNum = 13
+        self.heightNum = 2
         self.UOrD = 0
-        self.holdrecty = self.rect.y
+        self.inJump = False
         global theme
         if self.name == "SOLARIO":
             self.att = 2
@@ -27,13 +27,14 @@ class Character(pygame.sprite.Sprite):
             self.light = 25
             theme = "NIGHT"
     def jump(self):
-        if self.heightNum <= 12.5 and self.UOrD == 0 or self.heightNum == 0:
-            self.rect.y += self.heightNum**2
-            self.heightNum += 0.5
+        self.inJump = True
+        if self.heightNum <= 12.5 and self.UOrD == 0 or self.heightNum == 2:
+            self.rect.y -= self.heightNum**2
+            self.heightNum += 1
             self.UOrD = 0
-            if self.rect.y <= self.holdrecty - 150:
+            if self.heightNum == 13:
                 self.UOrD = 1
-        elif self.heightNum == 13.0 or self.UOrD == 1 and self.heightNum >= 3:
-            self.heightNum -= 0.5
+        elif self.heightNum == 13.0 or self.UOrD == 1 and self.heightNum >= 2:
+            self.heightNum += 0.5
             self.rect.y -= self.heightNum**2
             self.UOrD = 1
