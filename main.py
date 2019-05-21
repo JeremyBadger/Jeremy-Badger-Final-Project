@@ -3,7 +3,7 @@ from pygame.locals import *
 from character import Character
 from platform import Platform
 #Test
-FPS = 90
+FPS = 7
 pygame.init()
 WHITE = (255,255,255)
 fpsClock = pygame.time.Clock()
@@ -15,24 +15,22 @@ DAY1 = pygame.image.load('resources/Backgrounds/BetterDBG.png')
 DAY1 = pygame.transform.scale(DAY1,(768,432))
 NIGHT1 = pygame.image.load('resources/Backgrounds/BetterNBG.png')
 NIGHT1 = pygame.transform.scale(NIGHT1,(768,432))
-soSelect = pygame.Rect(129, 147, 222, 237)
 grassp1 = Platform(10, 1, 0, 382, 'resources/Platform-Textures/plat-text-dirt.png')
 stage = "SELECT"
 character = ""
 player = ""
 plats = pygame.sprite.Group()
 plats.add(grassp1)
-upDown = "DOWN"
-height = 0
+upDown = "UP"
+jumpheight = 5
 onGround = False
 global dropHeight
 dropHeight = 1
 pygame.key.set_repeat(120,30)
 def plat_detect(entity1, plat, onGround):
     if pygame.Rect.colliderect(entity1.rect, plat.top):
-        if player.inJump == False:
-            entity1.rect.y = plat.posY - 90
-            onGround = True
+        entity1.rect.y = plat.posY - 90
+        onGround = True
     elif pygame.Rect.colliderect(entity1.rect, plat.left):
         entity1.rect.x = plat.posX
         onGround = False
@@ -59,9 +57,11 @@ while True:
     if player != "":
         DISPLAYSURF.blit(player.image, (player.rect.x, player.rect.y))
         posHolder = 0
-        for x in grassp1.imagelist:
-            DISPLAYSURF.blit(x,(grassp1.posX + posHolder,grassp1.posY))
-            posHolder += 50
+        for plat in plats:
+            for x in plat.imagelist:
+                DISPLAYSURF.blit(x,(plat.posX + posHolder,plat.posY))
+                posHolder += 50
+        DISPLAYSURF.blit(player.image, (player.rect.x, player.rect.y))
 
     #Event loop
     for event in pygame.event.get():
@@ -84,38 +84,48 @@ while True:
                     player.rect.x += 10
                 if event.key == K_SPACE:
                     if onGround == True:
-                        #player.jump2(upDown,height)
-                        #player.inJump = True
-    #if onGround == False:
+                        for x in range(jumpheight ** 2):
+                            player.jump2(upDown,jumpheight)
+
+                        player.inJump = True
+                        #print("jump")
+    if onGround == True:
+        player.inJump = False
 
     if player != "":
+        if player.inJump == True:
+            onGround = False
+        if player.rect.y >= 432:
+            pygame.quit()
+            sys.exit()
+        if player.inJump == True:
+            if jumpheight == 90:
+                upDown = "DOWN"
+            elif jumpheight == 1:
+                upDown = "UP"
+            if upDown == "UP":
+                for x in range(jumpheight**2):
+                    player.jump2(upDown, jumpheight, onGround)
+                    for plat in plats:
+                        plat_detect(player,plat)
+                jumpheight -= 1
+            else:
+                for x in range(jumpheight**2):
+                    player.jump2(upDown, jumpheight)
+                    for plat in plats:
+                        plat_detect(player,plat, onGround)
+                jumpheight += 1
         for x in plats:
-            if player.inJump == False:
-                onGround = plat_detect(player, x, onGround)
+            onGround = plat_detect(player, x, onGround)
         if onGround == False and player.inJump == False:
-            #player.rect.y += dropHeight
+            for x in range(dropHeight ** 2):
+                player.rect.y += 1
+                for plat in plats:
+                    plat_detect(player,plat, onGround)
             dropHeight = (dropHeight+1)**2
         elif onGround == True and not player.inJump == True:
-            dropHeight = .1
-            player.UOrD = 0
-            player.heightNum = 2
+            dropHeight = 1
             player.inJump = False
-            #upDown = "UP"
-        if player.inJump == True:
-            if height == 10:
-                #upDown = "DOWN"
-            elif height == 1:
-                #upDown = "UP"
-
-            if upDown == "UP":
-                #player.jump2(upDown, height)
-                height += 1
-            else:
-                #player.jump2(upDown, height)
-                height -= 1
-            #if player.heightNum == 13:
-             #   player.UOrD = 1
-                #player.jump()
-            #elif player.heightNum != 13 and player.heightNum != 2:
-                #player.jump()
+            upDown = "UP"
     pygame.display.update()
+    fpsClock.tick(FPS)

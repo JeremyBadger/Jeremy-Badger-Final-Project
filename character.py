@@ -7,7 +7,7 @@ class Character(pygame.sprite.Sprite):
         super().__init__()
         self.name = name
         self.x = 0
-        self.y = 0
+        self.y = 432-96
         self.defense = 0
         self.att = 0
         self.hp = 100
@@ -26,22 +26,8 @@ class Character(pygame.sprite.Sprite):
             self.att = 1
             self.light = 25
             theme = "NIGHT"
-    #def jump(self):
-        self.inJump = True
-        if self.heightNum <= 12.5 and self.UOrD == 0 or self.heightNum == 2:
-            self.rect.y -= self.heightNum**2
-            self.heightNum += 1
-            self.UOrD = 0
-            if self.heightNum == 13:
-                self.UOrD = 1
-        elif self.heightNum == 13.0 or self.UOrD == 1 and self.heightNum >= 2:
-            self.heightNum += 0.5
-            self.rect.y -= self.heightNum**2
-            self.UOrD = 1
-    def jump2(self, upDown, height):
+    def jump2(self, upDown, jumpheight):
         if upDown == "UP":
-            for x in range(height**2):
-                self.rect.y -= 1
+            self.rect.y -= 1
         elif upDown == "DOWN":
-            for x in range(height **2):
-                self.rect.y += 1
+            self.rect.y += 1
