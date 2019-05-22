@@ -84,10 +84,12 @@ while True:
                     player.rect.x += 10
                 if event.key == K_SPACE:
                     if onGround == True:
-                        for x in range(jumpheight ** 2):
-                            player.jump2(upDown,jumpheight)
+                        player.jump4():
+                        player.update(plats):
+                        #for x in range(jumpheight ** 2):
+                        #    player.jump2(upDown,jumpheight)
 
-                        player.inJump = True
+                        #player.inJump = True
                         #print("jump")
     if onGround == True:
         player.inJump = False
@@ -99,22 +101,23 @@ while True:
             pygame.quit()
             sys.exit()
         if player.inJump == True:
-            if jumpheight == 90:
-                upDown = "DOWN"
-            elif jumpheight == 1:
-                upDown = "UP"
-            if upDown == "UP":
-                for x in range(jumpheight**2):
-                    player.jump2(upDown, jumpheight, onGround)
-                    for plat in plats:
-                        plat_detect(player,plat)
-                jumpheight -= 1
-            else:
-                for x in range(jumpheight**2):
-                    player.jump2(upDown, jumpheight)
-                    for plat in plats:
-                        plat_detect(player,plat, onGround)
-                jumpheight += 1
+            player.update
+            #if jumpheight == 90:
+            #    upDown = "DOWN"
+            #elif jumpheight == 1:
+            #    upDown = "UP"
+            #if upDown == "UP":
+            #    for x in range(jumpheight**2):
+            #        player.jump2(upDown, jumpheight, onGround)
+            #        for plat in plats:
+            #            plat_detect(player,plat)
+            #    jumpheight -= 1
+            #else:
+            #    for x in range(jumpheight**2):
+            #        player.jump2(upDown, jumpheight)
+            #        for plat in plats:
+            #            plat_detect(player,plat, onGround)
+            #    jumpheight += 1
         for x in plats:
             onGround = plat_detect(player, x, onGround)
         if onGround == False and player.inJump == False:
