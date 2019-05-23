@@ -34,6 +34,7 @@ class Character(pygame.sprite.Sprite):
         self.inJump = True
     def update(self, plats, fromPlat):
         notOn = 0
+        fromPlat = fromPlat
         if not self.inJump:
             for plat in plats:
                 if not pygame.Rect.colliderect(self.rect, plat.top):
@@ -62,12 +63,14 @@ class Character(pygame.sprite.Sprite):
                     s = 1
                     for k in range(round(F)):
                         for p in plats:
-                            if pygame.Rect.colliderect(self.rect, p.top)  and not pygame.Rect.colliderect(self.rect, p.left) and not pygame.Rect.colliderect(self.rect, p.right) and not pygame.Rect.colliderect(self.rect, p.bottom):
+                            if pygame.Rect.colliderect(self.rect, p.top) and not pygame.Rect.colliderect(self.rect, p.left) and not pygame.Rect.colliderect(self.rect, p.right) and not pygame.Rect.colliderect(self.rect, p.bottom):
                                 self.fall = False
                                 self.inJump = False
                                 self.v = 10
                                 self.rect.y = p.top.y - 96
                                 fromPlat = p
+                                print("YAYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYYY")
                         if self.fall:
                             self.rect.y += 1
                 self.v = self.v - .1
+                return(fromPlat)

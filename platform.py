@@ -15,5 +15,5 @@ class Platform(pygame.sprite.Sprite):
             self.imagelist.append(self.texture)
         self.bottom = pygame.Rect(self.posX, self.posY + 49, self.width * 50, 10)
         self.top = pygame.Rect(self.posX, self.posY, self.width*50, 10)
-        self.left = pygame.Rect(self.posX, self.posY + 3, 1, 47)
-        self.right = pygame.Rect(self.posX + (self.width * 50), self.posY + 3, 1, 47 )
+        self.left = pygame.Rect(self.posX, self.posY + 3, 1, 4)
+        self.right = pygame.Rect(self.posX + (self.width * 50), self.posY + 3, 1, 4 )

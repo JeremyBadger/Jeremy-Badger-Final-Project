@@ -29,8 +29,14 @@ jumpheight = 5
 onGround = True
 pygame.key.set_repeat(120,30)
 def plat_detect(entity1, plat, fromPlat):
-    if pygame.Rect.colliderect(entity1.rect, plat.top):
+    if pygame.Rect.colliderect(entity1.rect, plat.top) and not pygame.Rect.colliderect(entity1.rect, plat.left) and not pygame.Rect.colliderect(entity1.rect, plat.right) and not pygame.Rect.colliderect(entity1.rect, plat.bottom):
         fromPlat = plat
+    elif pygame.Rect.colliderect(entity1.rect, plat.left):
+        entity1.rect.x = plat.posX - 45
+    elif pygame.Rect.colliderect(entity1.rect, plat.right):
+        entity1.rect.x = plat.posX + (plat.width * 50)
+    elif pygame.Rect.colliderect(entity1.rect, plat.bottom):
+        entity1.rect.y = plat.posY + (plat.height * 50)
     return(fromPlat)
 
 while True:
@@ -82,7 +88,8 @@ while True:
     if player != "":
         for x in plats:
             fromPlat = plat_detect(player, x, fromPlat)
-        player.update(plats, fromPlat)
+        if fromPlat != "":
+            fromPlat = player.update(plats, fromPlat)
         if player.rect.y >= 432:
             pygame.quit()
             sys.exit()
