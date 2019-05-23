@@ -7,19 +7,15 @@ class Character(pygame.sprite.Sprite):
         super().__init__()
         self.name = name
         self.x = 0
-        self.y = 432-96
-        #self.defense = 0
-        #self.att = 0
-        #self.hp = 100
-        #self.light = 15
+        self.y = 0
         self.rect = pygame.Rect(self.x,self.y,54,96)
-        #self.heightNum = 2
-        #self.UOrD = 0
-        self.v = 8
-        self.m = 10
-        self.F = 0
+        self.v = 10
+        self.m = 1
         self.inJump = False
         self.goingUp = True
+        self.fall = False
+        self.runningleft = False
+        self.runningRight = False
         global theme
         if self.name == "SOLARIO":
             self.att = 2
@@ -30,46 +26,48 @@ class Character(pygame.sprite.Sprite):
             self.att = 1
             self.light = 25
             theme = "NIGHT"
-     #def jump2(self, upDown, height):
-     #   if upDown == "UP":
-      #      for x in range(height**2):
-       #         self.rect.y -= 1
-        #elif upDown == "DOWN":
-         #   for x in range(height **2):
-          #      self.rect.y += 1
-    #def jump3UP(self):
-    #    self.rect.y -= 1
-    #def jump3DOWN(self):
-#        self.rect.y += 1
-
-    #yes this is my FOURTH attempt in the last three days to get the &%*$*@# jump to work
-    #Shamelessly stolen from pythonspot.com because I have already put ~10 hrs into the jump command, probably wont work anyway...
+    def runR(self):
+        self.runningRight = True
+    def runL(self):
+        self.runningleft = True
     def jump4(self):
         self.inJump = True
     def update(self, plats, fromPlat):
+        notOn = 0
+        if not self.inJump:
+            for plat in plats:
+                if not pygame.Rect.colliderect(self.rect, plat.top):
+                    notOn += 1
+            if notOn == len(plats):
+                self.inJump = True
+                self.fall = True
+        if self.runningleft:
+            self.rect.x -= 20
+        elif self.runningRight:
+            self.rect.x += 20
         if self.inJump:
             # Calculate force (F). F = 0.5 * mass * velocity^2.
             if fromPlat != "":
                 F = ( 0.5 * self.m * (self.v*self.v) )
-                #else:
-                #    F = -( 0.5 * self.m * (self.v*self.v) )
 
-                if self.rect.y > fromPlat.top.y - 150:
+                if self.fall == False:
                     # Change position
-                    for s in range(round(F)) and self.rect.y :
+                    s = 1
+                    while s in range(round(F)) and not self.fall:
                         self.rect.y = self.rect.y - 1
+                        s += 1
+                        if self.rect.y < fromPlat.top.y - 240:
+                            self.fall = True
                 else:
-                    for s in range(round(F)):
-                        self.rect.y += 1
-
-                # Change velocity
-                self.v = self.v - 1
-
-                # If ground is reached, reset variables.
-                for plat in plats:
-                    if plat != "":
-                        if self.rect.y == plat.top.y - 96:
-                            self.rect.y = plat.top.y - 96
-                            self.isjump = False
-                            self.v = 8
-                            self.goingUp = True
+                    s = 1
+                    for k in range(round(F)):
+                        for p in plats:
+                            if pygame.Rect.colliderect(self.rect, p.top)  and not pygame.Rect.colliderect(self.rect, p.left) and not pygame.Rect.colliderect(self.rect, p.right) and not pygame.Rect.colliderect(self.rect, p.bottom):
+                                self.fall = False
+                                self.inJump = False
+                                self.v = 10
+                                self.rect.y = p.top.y - 96
+                                fromPlat = p
+                        if self.fall:
+                            self.rect.y += 1
+                self.v = self.v - .1

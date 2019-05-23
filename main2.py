@@ -25,27 +25,12 @@ upDown = "UP"
 fromPlat = ""
 jumpheight = 5
 onGround = True
-global dropHeight
-dropHeight = 1
 pygame.key.set_repeat(120,30)
 def plat_detect(entity1, plat, fromPlat):
     if pygame.Rect.colliderect(entity1.rect, plat.top):
         #if not entity1.inJump and not onGround:
         entity1.rect.y = plat.posY - 90
         fromPlat = plat
-            #onGround = True
-    #elif pygame.Rect.colliderect(entity1.rect, plat.left):
-    #    entity1.rect.x = plat.posX
-        #onGround = False
-    #elif pygame.Rect.colliderect(entity1.rect, plat.right):
-    #    entity1.rect.x = plat.posX + (plat.width * 50)
-        #onGround = False
-    #elif pygame.Rect.colliderect(entity1.rect, plat.bottom):
-    #b ,    entity1.rect.y = plat.posY + (plat.height * 50)
-        #onGround = False
-    #else:
-        #onGround = False
-    #return(onGround)
     return(fromPlat)
 
 while True:
@@ -87,68 +72,10 @@ while True:
                 elif event.key == K_d:
                     player.rect.x += 10
                 if event.key == K_SPACE:
-                    #if onGround == True:
-                        #jumpheight = 5
-                        #goingUp = True
-                        #for x in range(jumpheight ** 2):
                     player.jump4()
-                        #if player != "":
-                            #player.inJump = True
-#    if onGround == True:
-#        if player != "":
-#            player.inJump = False
-
     if player != "":
-        #if player.inJump == True:
-        #    onGround = False
-        if player.rect.y >= 432:
-            pygame.quit()
-            sys.exit()
-    #if player.inJump == True:
-        #    if jumpheight == 5:
-        #        upDown = "DOWN"
-        #    elif jumpheight == 1:
-        #        upDown = "UP"
-        #    if upDown == "UP":
-        #        for x in range(jumpheight**2):
-        #            player.jump2(upDown, jumpheight)
-        #            for plat in plats:
-        #                plat_detect(player,plat,onGround)
-        #        jumpheight -= 1
-        #    else:
-        #        for x in range(jumpheight**2):
-        #            player.jump2(upDown, jumpheight)
-        #            for plat in plats:
-        #                plat_detect(player,plat, onGround)
-        #       jumpheight += 1
         for x in plats:
             fromPlat = plat_detect(player, x, fromPlat)
         player.update(plats, fromPlat)
-            #if jumpheight == 10:
-            #    goingUp = False
-            #elif jumpheight == 5:
-            #    goingUp = True
-            #if goingUp:
-            #    for x in range(jumpheight ** 2) and not onGround:
-            #        player.jump3UP()
-            #        for plat in plats:
-            #            onGround = plat_detect(player, plat, onGround)
-            #    jumpheight += 1
-            #elif not goingUp:
-            #    for x in range(jumpheight ** 2) and not onGround:
-            #        player.jump3DOWN()
-            #        for plat in plats:
-            #            onGround = plat_detect(player, plat, onGround)
-            #    jumpheight -= 1
-    #if onGround == False and player.inJump == False:
-        #    for x in range(dropHeight ** 2):
-        #        player.rect.y += 1
-        #        for plat in plats:
-        #            plat_detect(player,plat, onGround)
-        #    dropHeight = (dropHeight+1)**2
-        #elif onGround == True and not player.inJump == True:
-        #    dropHeight = 1
-        #    player.inJump = False
-        #   upDown = "UP"
     pygame.display.update()
     fpsClock.tick(FPS)
